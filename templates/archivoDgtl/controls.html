@@ -1,0 +1,54 @@
+    <div class="col-md-3 col-md-pull-9">
+      <aside class="sidebar left">
+        <form id="selects" method="get" action="">
+          <div class="widget search">
+            <h3>Buscar</h3>
+              <label class="sr-only" for="blog-search"></label>
+              <input class="form-control input-lg" name="busca" id="blog-search" type="text" placeholder="Buscar">
+          </div>
+          <div class="widget rposts">
+            <div class="rpost">
+              <div class="select-style col-md-6 col-sm-6">
+                <select id="anios" class="" name="anios">
+                  <option value="0">Años</option>
+                  {% for año in años %}
+                    <option value="{{año.pk}}" {% if año.pk == selectedaño %} selected {% endif %}>{{año.periodo}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="widget rposts">
+            <div class="rpost">
+              <div class="select-style col-md-6 col-sm-6">
+                <select id="subareas" class="" name="subareas">
+                  <option value="{{selectedsubarea}}">Subareas</option>
+                  {% for subarea in subareas %}
+                  <option value="{{subarea.pk}}" {% if subarea.pk == selectedsubarea %} selected {% else %} noselected {% endif %}>{{subarea.nombre}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="widget rposts">
+            <div class="rpost">
+              <div class="select-style col-md-6 col-sm-6">
+                <select id="asuntos" class="" name="asuntos">
+                  <option value="0">Asuntos</option>
+                  {% for asunto in asuntos %}
+                    <option value="{{asunto.pk}}" class="nivel" data-nivel="{{asunto.nivel}}" {% if asunto.pk == selectedasunto %} selected {% endif %}>
+                      {% load extratags %}
+                      {% for value in 1|range:asunto.nivel %}
+                          ----
+                      {% endfor %}
+                      {{asunto.nivel}}.- {{asunto.nombre}}
+                    </option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+          </div>
+          <input id="go" class="btn btn-lg btn-primary btn-center form-control input-lg" type="submit" value="Ver Documentos">
+        </form>
+      </aside>
+    </div>

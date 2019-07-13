@@ -1,0 +1,40 @@
+{% extends 'base/base.html' %}
+{% block body_block %}
+{% load staticfiles %}
+<!--Page Content--><!-- InstanceBeginEditable name="content" -->
+  <div class="container-fluid">
+    <div class="row">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Area</th>
+            <th>Asunto</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for area in areas %}
+          <tr>
+            <td>
+              <p style="font-weight: bold;">{{ area }}</p>
+            </td>
+            <td>
+              {% for asunto in mapa %}
+                {% if area.nombre == asunto.area_del_asunto %}
+                    <p class="{{asunto.nivel}}">
+                      {% load extratags %}
+                      {% for value in 1|range:asunto.nivel %}
+                          --------
+                      {% endfor %}
+                      {{ asunto.nivel }}.- {{ asunto }}
+                    </p>
+                {% endif %}
+              {% endfor %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+{% endblock %}

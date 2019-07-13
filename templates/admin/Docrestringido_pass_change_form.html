@@ -1,0 +1,39 @@
+{% extends 'admin/change_form.html' %}
+{% load static %}
+{% block admin_change_form_document_ready %}
+{{ block.super }}
+<script src="{% static 'archivoDigital/js/jquery-3.3.1.min.js' %}"></script>
+  <script type="text/javascript">
+  $(document).ready(function(){
+    $('.deletelink-box').html('');
+    $("#id_password").attr('type','password');
+    var inputsPasworts=['.field-passwordAdmn','.field-password_1','.field-passwordC'];
+    var inputsPaswortsIds=['#id_passwordAdmn','#id_password_1','#id_passwordC'];
+      hidethem(inputsPasworts,inputsPaswortsIds);
+      if($('#id_changerPs').is(':checked')){
+        showthem(inputsPasworts);
+        $("#id_password").removeAttr('readonly');
+      }
+      $('#id_changerPs').change(function(){
+        if($(this).is(':checked')){
+          showthem(inputsPasworts);
+          $("#id_password").removeAttr('readonly');
+        }else{
+          hidethem(inputsPasworts,inputsPaswortsIds);
+          $("#id_password").attr('readonly','readonly');
+        }
+      });
+    function hidethem(inputsclas,inputsids){
+      for (var input in inputsclas) {
+        $(inputsclas[input]).hide();
+        $(inputsids[input]).val('');
+      }
+    }
+    function showthem(inputsclas){
+      for (var input in inputsclas) {
+        $(inputsclas[input]).fadeIn();
+      }
+    }
+  });
+</script>
+{% endblock %}

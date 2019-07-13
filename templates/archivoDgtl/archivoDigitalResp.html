@@ -1,0 +1,275 @@
+{% extends 'base/base.html' %}
+{% block body_block %}
+{% load staticfiles %}
+<!--Page Content--><!-- InstanceBeginEditable name="content" -->
+<div class="page blog">
+
+<!--Toolbox-->
+<div class="toolbox">
+  <div class="container">
+    <div class="heading">
+      <button class="back-btn" onclick="goBack()"><i class="fa fa-angle-left"></i></button>
+      <h1>Bienvenido {{usuario}}</h1>
+    </div>
+    <div class="layout-view"></div>
+  </div>
+</div><!--Toolbox Close-->
+
+<!--Breadcrumbs
+<div class="container space-top">
+  <ol class="breadcrumb">
+    {% for area in ruta reversed %}
+    <li><a class="changeArea" href="subareas={{ area.pk }}" >{{ area }}</a></li>
+    {% endfor %}
+    {% for asunto in rutaAsunto reversed %}
+    <li><a class="changeAsunto" href="asuntos={{ asunto.pk }}" >{{ asunto }}</a></li>
+    {% endfor %}
+  </ol>
+</div>Breadcrumbs Close-->
+
+<div class="container space-top">
+  <h1>{{areaRestringida}} {{unrestricted}}</h1>
+  <ol class="breadcrumb">
+    {% for docx in docsUnRestricted %}
+          <li><a class="changeArea" href="#" >{{ docx }}</a></li>
+    {% endfor %}
+  </ol>
+</div><!--Breadcrumbs Close-->
+
+
+<div class="container double-padding-bottom">
+  <div class="row">
+    <!--Blog Posts-->
+    <section class="col-md-9 col-md-push-3 list-view">
+      {% if areaRestringida and not unrestricted %}
+      <div class="row post">
+        <div class="col-md-12 col-sm-12">
+          <div class="jumbotron">
+            <h3>Esta área está restringida {{areaRestringida}} {{unrestricted}}</h3>
+            <p>Para ver el contenido de esta área ingrese la clave de acceso.</p>
+            <form class="" action="{% url 'checkRestrict' %}" method="POST">
+                <label class="sr-only" for="password"></label>
+                <input type="password" class="form-control input-lg" name="passwordAreaRestricted" id="passwordAreaRestricted" placeholder="Contraseña" required>
+                <input type="hidden" class="form-control input-lg" name="anios" value="{{anio}}">
+                <input type="hidden" class="form-control input-lg" name="subareas" value="{{subarea}}">
+                <br>
+                <input class="btn btn-lg btn-primary btn-center form-control input-lg" type="submit" value="Ingresar">
+                {% csrf_token %}
+            </form>
+          </div>
+        </div>
+      </div>
+      {% elif unrestricted and not areaRestringida %}
+      <div class="row post">
+        <div class="col-md-12 col-sm-12">
+          <div class="jumbotron">
+            <h3>Contraseña correcta</h3>
+            <p>Para continuar presione el boton de acceder.</p>
+            <form class="" action="{% url 'archivoDigital' %}" method="GET">
+                <input type="hidden" name="anios" value="{{anio}}">
+                <input type="hidden" name="subareas" value="{{subarea}}">
+                <input type="hidden" name="asuntos" value="0">
+                <br>
+                <input class="btn btn-lg btn-primary btn-center form-control input-lg" type="submit" value="Ingresar">
+            </form>
+          </div>
+        </div>
+      </div>
+      {% else %}
+        {% if alertaDefisgon %}
+        <div class="row post">
+          <div class="col-md-12 col-sm-12">
+            <div class="jumbotron">
+              <h3>No autorizado</h3>
+              <p>Usted no esta autorizado para ver el contenido de esta area.</p>
+              <p>Este intento de acceso quedara registrado en la base de datos.</p>
+              <a class="btn btn-primary" href="{% url 'archivoDigital' %}">Regresar a mi area</a>
+            </div>
+          </div>
+        </div>
+        {% else %}
+          {% if object_list %}
+            {% for documento in object_list %}
+              {% if documento.documento_restringido %}
+                {% if documento.pk in docsUnRestricted %}
+                  <div class="row post">
+                    <div class="col-md-1 col-sm-1">
+                      <a href="{{ MEDIA_URL }}{{ documento.documento.url|urlencode }}"><img style="width:100%" src="{% static './archivoDigital/img/pdfimg.png' %}"/></a>
+                    </div>
+                    <div class="col-md-11 col-sm-11">
+                      <h3><a href="{{ MEDIA_URL }}{{ documento.documento.url|urlencode }}">{{ documento.Nombre }}</a></h3>
+                    </div>
+                  </div>
+                {% else %}
+                  <div class="row post">
+                    <form class="" action="{% url 'checkRestrictDoc' %}" method="POST">
+                      <div style="background: #888; padding: 15px 15px 10px 15px" class="space-top button-demo">
+                        <h3 style="color:white;">{{ documento.Nombre }}</h3>
+                            <h4 style="color:white;">Documento restringido. Para tener acceso a su enlace debe proporcionar la clave de acceso.</h4>
+                              <input type="hidden" name="anios" value="{{anio}}">
+                              <input type="hidden" name="subareas" value="{{subarea}}">
+                              <input type="hidden" name="asuntos" value="{{asunto}}">
+                              <input type="hidden" name="documentoR" value="{{documento.pk}}">
+                              <input type="hidden" name="next" value="{{ request.path }}">
+                              <input type="password" class="form-control input-lg" id="pasdoc" name="pasdoc" placeholder="Clave de acceso">
+                            <br>
+                            <button style="width:100%;" type="submit" class="btn-outlined-invert btn-lg">Ver Documento</button>
+                      </div>
+                      {% csrf_token %}
+                    </form>
+                  </div>
+                {% endif %}
+              {% else %}
+                <div class="row post">
+                  <div class="col-md-1 col-sm-1">
+                    <a href="{{ MEDIA_URL }}{{ documento.documento.url|urlencode }}"><img style="width:100%" src="{% static './archivoDigital/img/pdfimg.png' %}"/></a>
+                  </div>
+                  <div class="col-md-11 col-sm-11">
+                    <h3><a href="{{ MEDIA_URL }}{{ documento.documento.url|urlencode }}">{{ documento.Nombre }}</a></h3>
+                  </div>
+                </div>
+                {% endif %}
+            {% endfor %}
+            {% if page_obj.has_other_pages %}
+              <ol class="pagination">
+                {% if page_obj.has_previous %}
+                  <li><a id="pagControlprev" href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+                {% else %}
+                  <li class="disabled"><span>&laquo;</span></li>
+                {% endif %}
+                {% for pg in page_obj.paginator.page_range %}
+                  {% if page_obj.number == pg %}
+                    <li class="active"><span>{{ pg }} <span class="sr-only">(current)</span></span></li>
+                  {% else %}
+                    <li><a class="pagControlinner" href="?page={{ pg }}">{{ pg }}</a></li>
+                  {% endif %}
+                {% endfor %}
+                {% if page_obj.has_next %}
+                  <li><a id="pagControlnext" href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+                {% else %}
+                  <li class="disabled"><span>&raquo;</span></li>
+                {% endif %}
+              </ol>
+            {% endif %}
+          {% else %}
+            <div class="row post">
+              <div class="col-md-12 col-sm-12">
+                <div class="jumbotron">
+                  <h3>Ups! ÁREA Sin Documentos</h3>
+                  <p>Por el momento no existen archivos digitales asignados a esta area.</p>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+        </section><!--Blog Posts Close-->
+        {% endif %}
+
+      {% endif %}
+    <!-- Button trigger modal -->
+
+    <!--Sidebar-->
+    {% include 'archivoDgtl/controls.html' %}
+    <!--Sidebar Close-->
+
+  </div>
+</div>
+
+<!--Info Box Widget-->
+<section class="info-box gray">
+  <div class="container space-top space-bottom">
+    <div class="">
+      <h4 class="light-color">Espacio asignado para los mapas</h4>
+      <p>El sitio cuenta con mapas para que los usuarios puedan orientarse al momento de realizar una consulta.</p>
+      <a class="btn btn-outlined btn-primary" style="margin:30px !important;" href="#">Ver mapa de área</a>
+      <a class="btn btn-primary" href="#">Alguna otra cosa que haga falta</a>
+    </div>
+  </div>
+</section><!--Info Box Widget Close-->
+
+<!--Sidebar Toggle-->
+<a href="#sidebar" class="sidebar-button"><i class="fa fa-outdent"></i></a>
+{% block javascript %}
+<script src="{% static './archivoDigital/js/jquery-3.3.1.min.js' %}"></script>
+<script>
+  $(function(){
+    $('#pagControlnext').click(function(){
+      pager('#pagControlnext',$(this).attr('href'));
+    });
+    $('.pagControlinner').click(function(){
+      pager('.pagControlinner',$(this).attr('href'));
+    });
+    $('#pagControlprev').click(function(){
+      pager('#pagControlprev',$(this).attr('href'));
+    });
+
+    var pager=function(id,pagina){
+      ur=window.location.href;
+      parts=ur.split("/");
+      if(parts[4]==""){
+        $(id).attr('href',ur+pagina);
+      }else if(parts[4].substring(0,parts[4].indexOf('='))=='?page'){
+        $(id).attr('href',ur.replace(/\?page=[0-9]+/,pagina));
+      }else if(parts[4].indexOf('page')!=-1){
+        $(id).attr('href',ur.replace(/&page=[0-9]+/,pagina.replace('?','&')));
+      }else{
+        $(id).attr('href',ur+pagina.replace('?','&'));
+      }
+    };
+
+    $('.changeArea').click(function(){
+      ur=window.location.href;
+      ur=ur.replace(/subareas=[0-9]+/,$(this).attr('href'));
+      ur=ur.replace(/asuntos=[0-9]+/,'asuntos=0');
+      ur=ur.replace(/[?|&]{1}page=[0-9]+/,'');
+      buscando=getQueryStringValue("busca");
+      ur=ur.replace(buscando,'');
+      $(this).attr('href',ur);
+    });
+
+    $('.changeAsunto').click(function(){
+      ur=window.location.href;
+      ur=ur.replace(/asuntos=[0-9]+/,$(this).attr('href'));
+      ur=ur.replace(/[?|&]{1}page=[0-9]+/,'');
+      buscando=getQueryStringValue("busca");
+      ur=ur.replace('busca='+buscando,'busca=');
+      $(this).attr('href',ur);
+    });
+
+    $("#selects").submit(function(event){
+      var ur=window.location.href;
+      var queryString=getPathFromUrl(ur);
+      if(queryString.length!=0){
+        if($('#blog-search').val()!=""){
+          event.preventDefault();
+          ur=ur.replace(/[?|&]{1}page=[0-9]+/,'');
+          valorDebusca=getQueryStringValue("busca");
+          ur=ur.replace('busca='+valorDebusca,'busca='+$('#blog-search').val());
+          window.location.href = ur;
+        }
+      }
+    });
+
+    function getPathFromUrl(url) {
+      queryString=url.split("?");
+      return (queryString.length>1)?queryString[1]:'';
+    }
+
+    function getQueryStringValue(key) {
+      return decodeURIComponent(window.location.search.replace(new RegExp("^(?:.*[&\\?]" + encodeURIComponent(key).replace(/[\.\+\*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$", "i"), "$1"));
+    }
+
+    /*niveles=[];
+
+    $('.nivel').each(function(i) {
+        if(niveles.indexOf($(this).attr('data-nivel'))==-1){
+          niveles.push($(this).attr('data-nivel'));
+          $(this).attr('style','color:red important!;');
+        }
+        console.log(niveles);
+    });*/
+  });
+</script>
+{% endblock %}
+
+</div>
+{% endblock %}

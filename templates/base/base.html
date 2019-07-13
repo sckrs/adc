@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Archivo Digital CIESAS</title>
+    <!--SEO Meta Tags-->
+    <meta name="description" content="Responsive Multipurpose HTML5 Template" />
+		<meta name="keywords" content="responsive html5 template, multipurpose, blog, portfolio, e-commerce, bootstrap 3, css, jquery, flat, modern" />
+		<meta name="author" content="8Guild" />
+    <link rel="icon" href="{% static 'archivoDigital/img/ciesas.png' %}" type="image/x-icon">
+    <link href="{% static 'archivoDigital/css/masterslider.css' %}" rel="stylesheet" media="screen">
+    <link href="{% static 'archivoDigital/css/styles.css' %}" rel="stylesheet" media="screen">
+    <link class="color-scheme" href="{% static 'archivoDigital/css/color-2f8cea.css' %}" rel="stylesheet" media="screen">
+    <script src="{% static 'archivoDigital/js/libs/modernizr.custom.js' %}"></script>
+  </head>
+  <body class="parallax animated fadeIn"><!--Add "parallax" class if you have elements on the page with parallax backgrounds. "fadeIn" class makes content fades in on loading-->
+    <div class="off-canvas-wrap" data-offcanvas>
+    	<div class="inner-wrap">
+        <div class="site-layout"><!--If you add class "boxed" to .site-layout it wraps the whole document in a box, than you can simply add pattern background to body or leave it white. Please note in a "boxed" mode header doesn't stick to the top.-->
+          <header class="header sticky"><!--Adding class "sticky" to header enables its pinning to top on scroll. Please note in a "boxed" mode header doesn't stick to the top.-->
+            <div class="inner">
+              <div class="container group">
+                <a class="logo" href="#"><img src="{% static 'archivoDigital/img/logo.png' %}" alt="conacyt"/></a>
+                <div class="tools group">
+                  <a class="logo" href="#"><img src="{% static 'archivoDigital/img/ciesas_logo.png' %}" alt="conacyt"/></a>
+                </div>
+                {% if user.is_authenticated %}
+                <div class="navigation">
+                  <div class="menu">
+                    <ul>
+                      <li class="active"> <a class="navbar-link" href="{% url 'logout' %}">Salir</a> </li>
+                    </ul>
+                  </div>
+                </div>
+                {% endif %}
+              </div>
+            </div>
+          </header><!--Header Close-->
+          {% block body_block %}
+            {# Anything outside of this will be inherited if you use extend.#}
+          {% endblock %}
+          <footer class="footer"><!--Footer-->
+            <div class="copyright text-center">
+              <div class="container">
+                <p class="pull-left">CIESAS, Copyright @ 2018</p>
+                <div class="social-bar"></div>
+              </div>
+            </div>
+          </footer><!--Footer Close-->
+          <a class="exit-off-canvas"></a>
+        </div><!--Layout Close-->
+      </div>
+    </div><!--Off-Canvas Close-->
+    <script src="{% static 'archivoDigital/js/libs/jquery-1.11.1.min.js' %}"></script>
+    <script src="{% static 'archivoDigital/js/libs/jquery.easing.min.js' %}"></script>
+		<script src="{% static 'archivoDigital/js/plugins/bootstrap.min.js' %}"></script>
+		<script src="{% static 'archivoDigital/js/plugins/smoothscroll.js' %}"></script>
+    <script src="{% static 'archivoDigital/js/plugins/utilities.js' %}"></script>
+		<script src="{% static 'archivoDigital/js/plugins/foundation.min.js' %}"></script>
+		<script src="{% static 'archivoDigital/js/plugins/jquery.placeholder.js' %}"></script>
+    <script src="{% static 'archivoDigital/js/plugins/icheck.min.js' %}"></script>
+		<script src="{% static 'archivoDigital/js/plugins/jquery.validate.min.js' %}"></script>
+		<script src="{% static 'archivoDigital/js/plugins/waypoints.min.js' %}"></script>
+   	<script src="{% static 'archivoDigital/js/plugins/isotope.min.js' %}"></script>
+		<script src="{% static 'archivoDigital/js/plugins/masterslider.min.js' %}"></script>
+		<script src="{% static 'archivoDigital/js/plugins/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'archivoDigital/js/plugins/lightGallery.min.js' %}"></script>
+		<script src="{% static 'archivoDigital/js/plugins/jquery.stellar.min.js' %}"></script>
+    <script src="{% static 'archivoDigital/js/plugins/jquery.parallax.min.js' %}"></script>
+		<script src="{% static 'archivoDigital/js/plugins/chart.min.js' %}"></script>
+    <script src="{% static 'archivoDigital/js/plugins/jquery-numerator.js' %}"></script>
+    <script src="{% static 'archivoDigital/js/plugins/jquery.countdown.min.js' %}"></script>
+	  <script src="{% static 'archivoDigital/js/plugins/jquery.easypiechart.min.js' %}"></script>
+    <script src="{% static 'archivoDigital/js/plugins/jquery.nouislider.min.js' %}"></script>
+    <script src="{% static 'archivoDigital/js/plugins/card.min.js' %}"></script>
+    <script src="{% static 'archivoDigital/js/scripts.js' %}"></script>
+  </body>
+</html>

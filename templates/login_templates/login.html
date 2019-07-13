@@ -1,0 +1,90 @@
+{% extends 'base/base.html' %}
+{% block body_block %}
+{% load staticfiles %}
+<div class="page">
+  <div id="loginPage" class="specialty-page-bg"></div>
+  <section class="specialty-page">
+  	<div class="container">
+    	<div class="row">
+        {% if error %}
+          <div class="alert alert-danger">
+              <a class="close" href="#" data-dismiss="alert">×</a>
+              <p>{{ mensaje }}</p>
+          </div>
+        {% endif %}
+        {% if blocked %}
+          <div class="alert alert-danger">
+              <a class="close" href="#" data-dismiss="alert">×</a>
+              <p>{{ blocked }}</p>
+          </div>
+        {% endif %}
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12">
+          <div class="page-heading">
+            <h2>Archivo Digital CIESAS</h2>
+            <h3>Para ingresar ingrese sus credenciales de acceso</h3>
+          </div>
+          <form method="POST" class="login-form space-bottom" action="#">
+            <div class="form-group">
+              <label class="sr-only" for="email"></label>
+              <input type="email" class="form-control input-lg" name="email" id="email" placeholder="Correo electrónico" required>
+            </div>
+            <div class="form-group">
+              <label class="sr-only" for="password"></label>
+              <input type="password" class="form-control input-lg" name="password" id="password" placeholder="Contraseña" required>
+            </div>
+            <input class="btn btn-md btn-primary btn-center" type="submit" value="Ingresar">
+            {% csrf_token %}
+          </form>
+          <p><dl>
+            <dd>Si ha olvidado su contraseña favor de enviar un correo electrónico a:</dd>
+            <dd>ing.sc.husg@gmail.com</dd>
+            <dd>Solicitando un cambio de contraseña</dd>
+          </dl></p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!--jklasjaskjdlkj-->
+  <section class="info-box gray">
+    <div class="container space-top space-bottom">
+      <div class="row">
+        <div class="col-sm-12">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-4">
+          <h4 class="light-color">45 años de existencia</h4>
+        </div>
+        <div class="col-sm-4">
+          <h4 class="light-color">Acceso a la información</h4>
+        </div>
+        <div class="col-sm-4">
+          <h4 class="light-color">Objetivo</h4>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-4">
+          <img style="width: 60%;margin-left:20%;" src="{% static 'archivoDigital/img/CI.png' %}"/>
+        </div>
+        <div class="col-sm-4">
+          <img src="{% static 'archivoDigital/img/ac.png' %}"/>
+        </div>
+        <div class="col-sm-4">
+          <img src="{% static 'archivoDigital/img/objetivo.png' %}"/>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-4">
+          <p>El Centro de Investigaciones y Estudios Superiores en Antropología cumple 45 años</p>
+        </div>
+        <div class="col-sm-4">
+          <p>Este portal pone a su disposición los expedientes generados durante la gestión 2015-2018.</p>
+        </div>
+        <div class="col-sm-4">
+          <p>El objetivo principal de este portal es formar parte del acta entrega del Director General.</p>
+        </div>
+      </div>
+    </div>
+  </section><!--Info Box Widget Close-->
+</div><!--Page Content Close-->
+{% endblock %}

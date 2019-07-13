@@ -1,0 +1,24 @@
+{% extends 'admin/change_form.html' %}
+{% load static %}
+
+{% block admin_change_form_document_ready %}
+{{ block.super }}
+  <script type="text/javascript" src="{% static 'archivoDigital/js/formset_handlers.js' %}"></script>
+  <script type="text/javascript">
+    error=document.querySelector('.errornote');
+    if(error!=null){
+      error.innerHTML='Contraseña de administrador incorrecta, favor de corregirla.'
+    }
+    indicador = document.querySelector('#one');
+    document.querySelector('.field-password_admin').style.visibility = 'hidden';
+    indicador.addEventListener("click",function(){
+        if(indicador['checked']){
+          alert('Favor de proporcionar la contraseña del administrador para realizar el cambio de la contraseña de este usuario');
+          document.querySelector('.field-password_admin').style.visibility = 'visible';
+        }else{
+          document.querySelector('.field-password_admin').style.visibility = 'hidden';
+          document.querySelector('#id_password_admin').value="";
+        }
+    })
+  </script>
+{% endblock %}
